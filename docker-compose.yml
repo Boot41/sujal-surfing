@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  react:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/app
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npm", "run", "dev"]  # If you are using Vite, this will start the Vite dev server
+
+  django:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]  # Ensure it binds to 0.0.0.0
+
